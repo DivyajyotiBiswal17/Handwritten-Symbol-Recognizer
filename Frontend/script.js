@@ -1,16 +1,29 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
+const colorPicker = document.getElementById('colorPicker');
+const brushSize = document.getElementById('brushSize');
+const darkModeToggle = document.getElementById('darkModeToggle');
+const predictionBox = document.getElementById('prediction');
 let painting = false;
 
+// Initialize background white
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 canvas.addEventListener('mousedown', () => painting = true);
-canvas.addEventListener('mouseup', () => painting = false);
+canvas.addEventListener('mouseup', () => {
+    painting = false;
+    ctx.beginPath();
+});
 canvas.addEventListener('mousemove', draw);
 
 function draw(e) {
     if (!painting) return;
-    ctx.lineWidth = 15;
+    const color = document.getElementById('colorPicker').value;
+    const size = document.getElementById('brushSize').value;
+    ctx.lineWidth = size;
     ctx.lineCap = 'round';
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = color;
 
     const rect = canvas.getBoundingClientRect();
     ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
@@ -21,6 +34,8 @@ function draw(e) {
 
 function clearCanvas() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = darkModeToggle.checked ? "#333" : "white";  // add this
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.beginPath();
 }
 
@@ -36,10 +51,16 @@ function predict() {
     })
     .then(response => response.json())
     .then(data => {
-        document.getElementById('result').innerText = "Prediction: " + data.prediction;
+        predictionBox.innerText = data.prediction;
     })
     .catch(err => {
         console.error(err);
-        alert("Prediction failed.");
+        predictionBox.innerText = "Error";
     });
 }
+// Dark mode logic
+darkModeToggle.addEventListener('change', () => {
+    document.body.classList.toggle('dark');
+    clearCanvas(); // also update canvas background
+});
+

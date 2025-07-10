@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Handwritten Symbol Recognizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Handwritten Symbol Recognizer</h2>
+
+        <div class="controls">
+            <button onclick="clearCanvas()">🧹 Clear</button>
+            <button onclick="predict()">🤖 Predict</button>
+            <label>Brush Color: <input type="color" id="colorPicker"></label>
+            <label>Brush Size: <input type="range" min="5" max="30" value="15" id="brushSize"></label>
+            <label><input type="checkbox" id="darkModeToggle"> Dark Mode</label>
+        </div>
+
+        <canvas id="canvas" width="280" height="280"></canvas>
+
+        <p id="result">Prediction: <span id="prediction">---</span></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+    

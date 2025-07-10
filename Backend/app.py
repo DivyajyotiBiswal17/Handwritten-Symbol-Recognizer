@@ -1,4 +1,5 @@
 # backend/app.py
+from flask_cors import CORS
 from flask import Flask, request, jsonify
 from tensorflow.keras.models import load_model
 import numpy as np
@@ -10,6 +11,7 @@ from PIL import Image
 from utils import preprocess_image
 
 app = Flask(__name__)
+CORS(app)
 
 # Load the trained model
 model = load_model("model/symbol_cnn_model.h5")
@@ -34,6 +36,10 @@ def predict():
         # Predict
         prediction = model.predict(processed)
         predicted_class = labels[np.argmax(prediction)]
+        print("Prediction vector:", prediction)
+        print("Predicted index:", np.argmax(prediction))
+        print("Predicted label:", predicted_class)
+
 
         return jsonify({"prediction": predicted_class})
 
